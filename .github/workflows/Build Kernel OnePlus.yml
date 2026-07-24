@@ -488,6 +488,15 @@ jobs:
             sed -i 's/if check_defconfig == None:/if False:  # check_defconfig == None:/' kernel_platform/build/kernel/kleaf/common_kernels.bzl
           fi
 
+      - name: Pin OnePlus 13 kernel source for PJZ110 16.0.8.301
+        if: ${{ github.event.inputs.FILE == 'oneplus_13_b' }}
+        run: |
+          set -e
+          git -C kernel_workspace/kernel_platform/common checkout 5a5534458764ecedd480533dbdb9f13d4d45af25
+          git -C kernel_workspace/kernel_platform/msm-kernel checkout 73ecb0dc41fb28ce5727465bd19d7469b4a6db73
+          git -C kernel_workspace checkout 9e08115481a5ee85ee44690bdcbf34d747928a23
+          grep -E '^(VERSION|PATCHLEVEL|SUBLEVEL) =' kernel_workspace/kernel_platform/common/Makefile
+
       - name: Kernel Version Handling
         run: |
           cd kernel_workspace/kernel_platform
